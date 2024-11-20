@@ -23,7 +23,10 @@ public class Album {
 
     private String title;
     private String artist;
+
+    @Enumerated(EnumType.STRING) // Save as a string in the database
     private Genre genre;
+
     private Boolean availability;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
