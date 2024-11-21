@@ -1,7 +1,9 @@
-package eks3.musicstore.controller;
+package eks3.musicstore.api;
 
 import eks3.musicstore.dto.AlbumDTO;
 import eks3.musicstore.service.AlbumService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ public class AlbumController {
 
     private final AlbumService albumService;
 
+    @Autowired
     public AlbumController(AlbumService albumService) {
         this.albumService = albumService;
     }

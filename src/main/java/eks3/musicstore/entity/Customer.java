@@ -28,7 +28,6 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AlbumCustomer> reservations = new HashSet<>();// List of album reservations
 
-    // Constructor with all fields
     public Customer(Long id, String firstName, String lastName, String email, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
@@ -36,4 +35,5 @@ public class Customer {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+
 }

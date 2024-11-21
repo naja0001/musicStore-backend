@@ -48,6 +48,13 @@ public class AlbumService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre must be provided");
         }
 
+//
+//
+//            if (request.getStore() != null) {
+//                album.getStore().setName(request.getStore());
+//            }
+
+
         // Creates a new Album entity and maps the data from the DTO
         Album newAlbum = new Album();
         newAlbum.setTitle(request.getTitle());

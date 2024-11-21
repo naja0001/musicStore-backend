@@ -29,14 +29,30 @@ public class Album {
 
     private Boolean availability;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id") // Foreign key column for Store
+    private Store store;
+
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AlbumCustomer> reservations = new HashSet<>();
 
-    public Album(Long id, String title, String artist, Genre genre, boolean availability) {
+
+    public Album(String title, String artist, Genre genre, Boolean availability) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.availability = availability;
+    }
+
+    public Album(Long id, String title, String artist, Genre genre, Boolean availability) {
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.genre = genre;
         this.availability = availability;
+    }
+
+    public boolean isAvailability() {
+        return availability;
     }
 }

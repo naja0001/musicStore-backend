@@ -1,54 +1,75 @@
 package eks3.musicstore.config;
 
-import eks3.musicstore.dto.AlbumDTO;
 import eks3.musicstore.entity.Album;
+import eks3.musicstore.entity.Store;
 import eks3.musicstore.enums.Genre;
-import eks3.musicstore.mapper.AlbumMapper;
 import eks3.musicstore.repository.AlbumRepository;
+import eks3.musicstore.repository.StoreRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class InitData implements ApplicationRunner {
 
+    private final StoreRepository storeRepository;
     private final AlbumRepository albumRepository;
 
-    public InitData(AlbumRepository albumRepository) {
+    public InitData(StoreRepository storeRepository, AlbumRepository albumRepository) {
+        this.storeRepository = storeRepository;
         this.albumRepository = albumRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        System.out.println("Creating initial album data:");
-        createAndSaveAlbums();
-        System.out.println("Initial album data loaded successfully.");
+        System.out.println("Initializing data...");
+
+        createStores();
+        createAlbums();
+        assignAlbumsToStores();
+
+        System.out.println("Data initialization completed.");
     }
 
-    private void createAndSaveAlbums() {
-        // Step 1: Create DTOs
-        List<AlbumDTO> albumDTOs = List.of(
-                new AlbumDTO(1L, "Thriller", "Michael Jackson", Genre.POP, true),
-                new AlbumDTO(2L, "Back in Black", "AC/DC", Genre.ROCK, true),
-                new AlbumDTO(3L, "The Dark Side of the Moon", "Pink Floyd", Genre.ROCK, false),
-                new AlbumDTO(4L, "Abbey Road", "The Beatles", Genre.ROCK, true),
-                new AlbumDTO(5L, "Rumours", "Fleetwood Mac", Genre.ROCK, false),
-                new AlbumDTO(6L, "21", "Adele", Genre.POP, true),
-                new AlbumDTO(7L, "Kind of Blue", "Miles Davis", Genre.JAZZ, true),
-                new AlbumDTO(8L, "Led Zeppelin IV", "Led Zeppelin", Genre.ROCK, true),
-                new AlbumDTO(9L, "Nevermind", "Nirvana", Genre.GRUNGE, true),
-                new AlbumDTO(10L, "The Wall", "Pink Floyd", Genre.ROCK, false)
+    private void createStores() {
+        List<Store> stores = List.of(
+                new Store("Downtown Music Store", "123 Main Street", "Springfield", "11111"),
+                new Store("Uptown Records", "456 High Street", "Shelbyville", "22222"),
+                new Store("Vinyl Haven", "789 Elm Avenue", "Ogdenville", "33333")
         );
+        storeRepository.saveAll(stores);
+    }
 
-        // Step 2: Map DTOs to Entities using the Mapper
-        List<Album> albums = albumDTOs.stream()
-                .map(AlbumMapper::mapToAlbum)
-                .collect(Collectors.toList());
 
-        // Step 3: Save to Database
+    private void createAlbums() {
+        List<Album> albums = List.of(
+                new Album("Thriller", "Michael Jackson", Genre.POP, true),
+                new Album("Back in Black", "AC/DC", Genre.ROCK, true),
+                new Album("The Dark Side of the Moon", "Pink Floyd", Genre.ROCK, true),
+                new Album("Abbey Road", "The Beatles", Genre.ROCK, true),
+                new Album("Rumours", "Fleetwood Mac", Genre.ROCK, true)
+        );
         albumRepository.saveAll(albums);
+    }
+
+    private void assignAlbumsToStores() {
+        // Fetches stores
+        Store store1 = storeRepository.findById(1L).orElseThrow(() -> new RuntimeException("Store not found"));
+        Store store2 = storeRepository.findById(2L).orElseThrow(() -> new RuntimeException("Store not found"));
+
+        // Fetches albums
+        Album album1 = albumRepository.findById(1L).orElseThrow(() -> new RuntimeException("Album not found"));
+        Album album2 = albumRepository.findById(2L).orElseThrow(() -> new RuntimeException("Album not found"));
+        Album album3 = albumRepository.findById(3L).orElseThrow(() -> new RuntimeException("Album not found"));
+
+        // Assigns albums to stores
+        album1.setStore(store1);
+        album2.setStore(store2);
+        album3.setStore(store1);
+
+        // Saves updates
+        albumRepository.saveAll(List.of(album1, album2, album3));
     }
 }

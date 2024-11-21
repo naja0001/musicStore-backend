@@ -2,6 +2,7 @@ package eks3.musicstore.mapper;
 
 import eks3.musicstore.dto.AlbumDTO;
 import eks3.musicstore.entity.Album;
+import eks3.musicstore.entity.Store;
 
 public class AlbumMapper {
 
@@ -11,8 +12,7 @@ public class AlbumMapper {
                 album.getTitle(),
                 album.getArtist(),
                 album.getGenre(),
-                album.getAvailability()
-        );
+                album.getAvailability());
     }
 
     public static Album mapToAlbum(AlbumDTO albumDto) {

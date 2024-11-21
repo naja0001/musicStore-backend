@@ -17,6 +17,7 @@ public class AlbumDTO {
     private String artist;
     private Genre genre;
     private Boolean availability;
+   // private Store store; Store more details
 
     public AlbumDTO(Album album) {
         this.id = album.getId();

@@ -28,4 +28,10 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Album> albums = new HashSet<>();
 
+    public Store(String name, String street, String city, String zip) {
+        this.name = name;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+    }
 }
